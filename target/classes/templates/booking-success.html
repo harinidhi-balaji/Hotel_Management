@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title>Booking Confirmed - LakeSide Hotel</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow-lg border-success">
+                        <div class="card-body p-5 text-center">
+                            <!-- Success Icon -->
+                            <div class="mb-4">
+                                <i class="fas fa-check-circle fa-5x text-success"></i>
+                            </div>
+                            
+                            <!-- Success Message -->
+                            <h1 class="text-success mb-3">
+                                <i class="fas fa-calendar-check"></i> Booking Confirmed!
+                            </h1>
+                            
+                            <p class="lead text-muted mb-4">
+                                Thank you for choosing LakeSide Hotel. Your room has been successfully booked.
+                            </p>
+                            
+                            <!-- Booking Details Card -->
+                            <div class="card bg-light mb-4">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary mb-3">
+                                        <i class="fas fa-info-circle"></i> Booking Details
+                                    </h5>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><strong>Confirmation Code:</strong></p>
+                                            <h4 class="text-primary" th:text="${confirmationCode}">ABC123456</h4>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p><strong>Room Type:</strong> <span th:text="${room?.roomType}">Room Type</span></p>
+                                            <p><strong>Guest:</strong> <span th:text="${guestName}">Guest Name</span></p>
+                                            <p><strong>Email:</strong> <span th:text="${guestEmail}">guest@email.com</span></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mt-3">
+                                        <div class="col-md-4">
+                                            <p><strong>Check-in:</strong><br>
+                                               <span class="badge bg-primary" th:text="${checkInDate}">2025-09-20</span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p><strong>Check-out:</strong><br>
+                                               <span class="badge bg-primary" th:text="${checkOutDate}">2025-09-22</span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <p><strong>Guests:</strong><br>
+                                               <span class="badge bg-info" th:text="${numOfAdults + ' Adults, ' + numOfChildren + ' Children'}">2 Adults, 0 Children</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Important Information -->
+                            <div class="alert alert-info" role="alert">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-exclamation-triangle"></i> Important Information
+                                </h6>
+                                <p class="mb-0">
+                                    Please save your confirmation code: <strong th:text="${confirmationCode}">ABC123456</strong>
+                                    <br>You will need this code for check-in and any future correspondence.
+                                </p>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                                <a href="/bookings" class="btn btn-primary btn-lg me-md-2">
+                                    <i class="fas fa-list"></i> View My Bookings
+                                </a>
+                                <a href="/rooms" class="btn btn-outline-secondary btn-lg">
+                                    <i class="fas fa-bed"></i> Book Another Room
+                                </a>
+                                <a href="/" class="btn btn-outline-primary btn-lg">
+                                    <i class="fas fa-home"></i> Back to Home
+                                </a>
+                            </div>
+                            
+                            <!-- Contact Information -->
+                            <div class="mt-5 pt-4 border-top">
+                                <h6 class="text-muted">Need Help?</h6>
+                                <p class="small text-muted">
+                                    Contact us at <strong>info@lakesidehotel.com</strong> or call <strong>+1 (555) 123-4567</strong>
+                                    <br>Our front desk is available 24/7 to assist you.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <th:block layout:fragment="scripts">
+        <script>
+            // Auto-print option
+            document.addEventListener('DOMContentLoaded', function() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('print') === 'true') {
+                    setTimeout(() => {
+                        window.print();
+                    }, 1000);
+                }
+            });
+        </script>
+    </th:block>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title>Book Room - LakeSide Hotel</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card shadow">
+                        <div class="card-body p-5">
+                            <h2 class="text-center mb-4">
+                                <i class="fas fa-calendar-check"></i> Book Your Room
+                            </h2>
+                            
+                            <!-- Room Details -->
+                            <div th:if="${room != null}" class="mb-4">
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Room Details</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Room Type:</strong> <span th:text="${room.roomType}">Room Type</span></p>
+                                                <p><strong>Price per Night:</strong> $<span th:text="${room.roomPrice}">0</span></p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Room ID:</strong> #<span th:text="${room.id}">0</span></p>
+                                                <p><strong>Status:</strong> 
+                                                    <span class="badge bg-success" th:if="${!room.isBooked}">Available</span>
+                                                    <span class="badge bg-danger" th:if="${room.isBooked}">Booked</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Booking Form -->
+                            <form th:action="@{/booking/room/{roomId}/book(roomId=${room.id})}" 
+                                  method="post" id="bookingForm">
+                                
+                                <!-- Guest Information -->
+                                <h5 class="mb-3">Guest Information</h5>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="guestFullName" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="guestFullName" 
+                                               name="guestFullName" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="guestEmail" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="guestEmail" 
+                                               name="guestEmail" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Booking Dates -->
+                                <h5 class="mb-3">Booking Dates</h5>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="checkInDate" class="form-label">Check-In Date</label>
+                                        <input type="date" class="form-control" id="checkInDate" 
+                                               name="checkInDate" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="checkOutDate" class="form-label">Check-Out Date</label>
+                                        <input type="date" class="form-control" id="checkOutDate" 
+                                               name="checkOutDate" required>
+                                    </div>
+                                </div>
+                                
+                                <!-- Guest Numbers -->
+                                <h5 class="mb-3">Number of Guests</h5>
+                                <div class="row mb-4">
+                                    <div class="col-md-4">
+                                        <label for="numOfAdults" class="form-label">Adults</label>
+                                        <input type="number" class="form-control" id="numOfAdults" 
+                                               name="numOfAdults" min="1" value="1" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="numOfChildren" class="form-label">Children</label>
+                                        <input type="number" class="form-control" id="numOfChildren" 
+                                               name="numOfChildren" min="0" value="0">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label">Total Nights</label>
+                                        <input type="text" class="form-control" id="totalNights" 
+                                               readonly value="0">
+                                    </div>
+                                </div>
+                                
+                                <!-- Price Summary -->
+                                <div class="card bg-light mb-4">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Price Summary</h5>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Room Price per Night:</span>
+                                            <span>$<span th:text="${room.roomPrice}">0</span></span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span>Number of Nights:</span>
+                                            <span id="nightsDisplay">0</span>
+                                        </div>
+                                        <hr>
+                                        <div class="d-flex justify-content-between">
+                                            <strong>Total Amount:</strong>
+                                            <strong>$<span id="totalAmount">0</span></strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Submit Buttons -->
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-check"></i> Confirm Booking
+                                    </button>
+                                    <a href="/rooms" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-left"></i> Back to Rooms
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <th:block layout:fragment="scripts">
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            const roomPrice = /*[[${room?.roomPrice ?: 0}]]*/ 0;
+            
+            function calculateTotal() {
+                const checkIn = document.getElementById('checkInDate').value;
+                const checkOut = document.getElementById('checkOutDate').value;
+                
+                if (checkIn && checkOut) {
+                    const startDate = new Date(checkIn);
+                    const endDate = new Date(checkOut);
+                    const timeDiff = endDate - startDate;
+                    const nights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                    
+                    if (nights > 0) {
+                        document.getElementById('totalNights').value = nights;
+                        document.getElementById('nightsDisplay').textContent = nights;
+                        document.getElementById('totalAmount').textContent = (nights * roomPrice).toFixed(2);
+                    } else {
+                        document.getElementById('totalNights').value = 0;
+                        document.getElementById('nightsDisplay').textContent = 0;
+                        document.getElementById('totalAmount').textContent = '0.00';
+                    }
+                }
+            }
+            
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('checkInDate').setAttribute('min', today);
+            
+            // Update checkout min date when checkin changes
+            document.getElementById('checkInDate').addEventListener('change', function() {
+                const checkInDate = this.value;
+                const checkOutInput = document.getElementById('checkOutDate');
+                
+                if (checkInDate) {
+                    const nextDay = new Date(checkInDate);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    checkOutInput.setAttribute('min', nextDay.toISOString().split('T')[0]);
+                    
+                    if (checkOutInput.value && new Date(checkOutInput.value) <= new Date(checkInDate)) {
+                        checkOutInput.value = '';
+                    }
+                }
+                calculateTotal();
+            });
+            
+            document.getElementById('checkOutDate').addEventListener('change', calculateTotal);
+            
+            // Form will submit normally to web controller - no AJAX interception needed
+            /*]]>*/
+        </script>
+    </th:block>
+</body>
+</html>

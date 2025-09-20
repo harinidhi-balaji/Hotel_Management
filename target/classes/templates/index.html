@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title>Home - LakeSide Hotel</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="container">
+                <h1 class="display-3 fw-bold mb-4">Welcome to LakeSide Hotel</h1>
+                <p class="lead mb-4">Experience luxury and comfort at its finest</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="/rooms" class="btn btn-light btn-lg">
+                        <i class="fas fa-search"></i> Explore Rooms
+                    </a>
+                    <a href="/booking/new" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-calendar-check"></i> Book Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Features Section -->
+        <div class="container py-5">
+            <h2 class="text-center mb-5">Why Choose LakeSide Hotel?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-bed fa-3x text-primary mb-3"></i>
+                            <h4>Luxurious Rooms</h4>
+                            <p>Spacious and elegantly designed rooms with modern amenities for your comfort.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-utensils fa-3x text-primary mb-3"></i>
+                            <h4>Fine Dining</h4>
+                            <p>Experience culinary excellence with our world-class restaurants and bars.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 text-center">
+                        <div class="card-body">
+                            <i class="fas fa-spa fa-3x text-primary mb-3"></i>
+                            <h4>Wellness & Spa</h4>
+                            <p>Rejuvenate your body and mind at our state-of-the-art spa and wellness center.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Available Rooms Section -->
+        <div class="container py-5" th:if="${rooms != null and !rooms.isEmpty()}">
+            <h2 class="text-center mb-5">Featured Rooms</h2>
+            <div class="row g-4">
+                <div class="col-md-4" th:each="room, iterStat : ${rooms}" th:if="${iterStat.index < 6}">
+                    <div class="card room-card h-100">
+                        <img th:if="${room.photo != null}" 
+                             th:src="@{'data:image/jpeg;base64,' + ${room.photo}}" 
+                             class="card-img-top" 
+                             alt="Room Photo">
+                        <img th:unless="${room.photo != null}" 
+                             src="https://via.placeholder.com/400x200?text=No+Image" 
+                             class="card-img-top" 
+                             alt="No Image">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${room.roomType}">Room Type</h5>
+                            <p class="card-text">
+                                <strong>Price:</strong> $<span th:text="${room.roomPrice}">0</span> per night
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success" th:if="${room.isBooked == false}">Available</span>
+                                <span class="badge bg-danger" th:if="${room.isBooked == true}">Booked</span>
+                                <a th:href="@{/room/{id}(id=${room.id})}" class="btn btn-sm btn-primary">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="/rooms" class="btn btn-primary btn-lg">
+                    <i class="fas fa-arrow-right"></i> View All Rooms
+                </a>
+            </div>
+        </div>
+        
+        <!-- Services Section -->
+        <div class="bg-light py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Our Services</h2>
+                <div class="row g-4">
+                    <div class="col-md-3 text-center">
+                        <i class="fas fa-wifi fa-3x text-primary mb-3"></i>
+                        <h5>Free Wi-Fi</h5>
+                        <p>High-speed internet throughout the hotel</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <i class="fas fa-parking fa-3x text-primary mb-3"></i>
+                        <h5>Free Parking</h5>
+                        <p>Secure parking for all guests</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <i class="fas fa-swimming-pool fa-3x text-primary mb-3"></i>
+                        <h5>Swimming Pool</h5>
+                        <p>Olympic-size pool with stunning views</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <i class="fas fa-dumbbell fa-3x text-primary mb-3"></i>
+                        <h5>Fitness Center</h5>
+                        <p>24/7 access to modern gym equipment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Testimonials Section -->
+        <div class="container py-5">
+            <h2 class="text-center mb-5">What Our Guests Say</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                            <p class="card-text">"Amazing experience! The staff was incredibly helpful and the rooms were spotless."</p>
+                            <footer class="blockquote-footer">John Doe</footer>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                            <p class="card-text">"Beautiful location with breathtaking views. Will definitely come back!"</p>
+                            <footer class="blockquote-footer">Jane Smith</footer>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
+                            <p class="card-text">"The best hotel experience I've ever had. Highly recommended!"</p>
+                            <footer class="blockquote-footer">Mike Johnson</footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- CTA Section -->
+        <div class="bg-primary text-white py-5">
+            <div class="container text-center">
+                <h2 class="mb-4">Ready to Experience Luxury?</h2>
+                <p class="lead mb-4">Book your stay today and enjoy exclusive offers</p>
+                <a href="/register" class="btn btn-light btn-lg me-3">
+                    <i class="fas fa-user-plus"></i> Sign Up Now
+                </a>
+                <a href="/rooms" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-search"></i> Browse Rooms
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

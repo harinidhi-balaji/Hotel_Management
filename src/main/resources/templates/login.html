@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/base}">
+<head>
+    <title>Login - LakeSide Hotel</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card shadow-lg mt-5">
+                        <div class="card-body p-5">
+                            <h2 class="text-center mb-4">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </h2>
+                            
+                            <!-- Error Message -->
+                            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span th:text="${error}">Invalid username or password!</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            
+                            <!-- Success Message -->
+                            <div th:if="${message}" class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle"></i>
+                                <span th:text="${message}">You have been logged out successfully.</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            
+                            <!-- Flash Messages -->
+                            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="fas fa-check-circle"></i>
+                                <span th:text="${success}">Success!</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            
+                            <!-- Login Form -->
+                            <form th:action="@{/perform_login}" method="post">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">
+                                        <i class="fas fa-envelope"></i> Email Address
+                                    </label>
+                                    <input type="email" 
+                                           class="form-control form-control-lg" 
+                                           id="username" 
+                                           name="username" 
+                                           placeholder="Enter your email"
+                                           required 
+                                           autofocus>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock"></i> Password
+                                    </label>
+                                    <input type="password" 
+                                           class="form-control form-control-lg" 
+                                           id="password" 
+                                           name="password" 
+                                           placeholder="Enter your password"
+                                           required>
+                                </div>
+                                
+                                <div class="mb-3 form-check">
+                                    <input type="checkbox" 
+                                           class="form-check-input" 
+                                           id="remember-me" 
+                                           name="remember-me">
+                                    <label class="form-check-label" for="remember-me">
+                                        Remember me
+                                    </label>
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-sign-in-alt"></i> Login
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <hr class="my-4">
+                            
+                            <div class="text-center">
+                                <p class="mb-0">
+                                    Don't have an account? 
+                                    <a href="/register" class="text-decoration-none">Register here</a>
+                                </p>
+                                <p class="mt-2">
+                                    <a href="/forgot-password" class="text-decoration-none text-muted">
+                                        <small>Forgot your password?</small>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Demo Credentials Info -->
+                    <div class="card mt-3 bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title">Demo Credentials</h6>
+                            <small class="text-muted">
+                                <strong>Admin:</strong> admin@lakeside.com / admin123<br>
+                                <strong>User:</strong> user@lakeside.com / user123
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <th:block layout:fragment="scripts">
+        <script>
+            // Auto-hide alerts after 5 seconds
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+        </script>
+    </th:block>
+</body>
+</html>
